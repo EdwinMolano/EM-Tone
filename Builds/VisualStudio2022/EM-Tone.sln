@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio Version 17
+
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EM-Tone - Standalone Plugin", "EM-Tone_StandalonePlugin.vcxproj", "{A130D445-CF34-E299-D706-9D6CDEF6B69F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A1DF37A4-3C41-121A-FB73-F48E6509A34B} = {A1DF37A4-3C41-121A-FB73-F48E6509A34B}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EM-Tone - VST3", "EM-Tone_VST3.vcxproj", "{95E855AA-6176-F80C-20EB-8AB6832CD32B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A1DF37A4-3C41-121A-FB73-F48E6509A34B} = {A1DF37A4-3C41-121A-FB73-F48E6509A34B}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EM-Tone - Shared Code", "EM-Tone_SharedCode.vcxproj", "{A1DF37A4-3C41-121A-FB73-F48E6509A34B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{95E855AA-6176-F80C-20EB-8AB6832CD32B}.Debug|x64.ActiveCfg = Debug|x64
+		{95E855AA-6176-F80C-20EB-8AB6832CD32B}.Debug|x64.Build.0 = Debug|x64
+		{95E855AA-6176-F80C-20EB-8AB6832CD32B}.Release|x64.ActiveCfg = Release|x64
+		{95E855AA-6176-F80C-20EB-8AB6832CD32B}.Release|x64.Build.0 = Release|x64
+		{A130D445-CF34-E299-D706-9D6CDEF6B69F}.Debug|x64.ActiveCfg = Debug|x64
+		{A130D445-CF34-E299-D706-9D6CDEF6B69F}.Debug|x64.Build.0 = Debug|x64
+		{A130D445-CF34-E299-D706-9D6CDEF6B69F}.Release|x64.ActiveCfg = Release|x64
+		{A130D445-CF34-E299-D706-9D6CDEF6B69F}.Release|x64.Build.0 = Release|x64
+		{A1DF37A4-3C41-121A-FB73-F48E6509A34B}.Debug|x64.ActiveCfg = Debug|x64
+		{A1DF37A4-3C41-121A-FB73-F48E6509A34B}.Debug|x64.Build.0 = Debug|x64
+		{A1DF37A4-3C41-121A-FB73-F48E6509A34B}.Release|x64.ActiveCfg = Release|x64
+		{A1DF37A4-3C41-121A-FB73-F48E6509A34B}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
