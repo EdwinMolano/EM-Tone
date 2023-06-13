@@ -13,7 +13,10 @@
 
 struct ChainSettings
 {
-    float GainLow{ 0 }, GainMid{ 0 }, GainHigh{ 0 };
+    float GainLow{ 0 }, GainMid{ 0 }, GainHigh{ 0 },
+        Gain{ 0 }, Tone{ 0 }, Volume{ 0 },
+        ChorusRate{ 0 }, ChorusDepth{ 0 }, ChorusMix{ 0 }, 
+        ReverbSize{ 0 }, ReverbDamp{ 0 }, ReverbWidth{ 0 }, ReverbMix{ 0 }   /*, freeze{ 0 }*/;
 
 
    
@@ -82,12 +85,14 @@ public:
     //void update3Knobs();
 
     //--------------Chorus Functions------------------
-    void updateChorusParams();
+   // void updateChorusParams();
 
     //--------------Reverb Functions------------------
-    void updateReverbParams();
+    //void updateReverbParams();
 
-    
+    //--------------RMS reader Functions------------------
+    float getInputRmsValue(const int channel) const;
+    float getOutputRmsValue(const int channel) const;
 
 
 private:
@@ -97,8 +102,6 @@ private:
     using MonoChain = juce::dsp::ProcessorChain<Filter, Filter, Filter>;
 
     MonoChain leftChain, rightChain;
-
-    
 
 
     //----------------------------Pre Chain Process------------------------
@@ -123,28 +126,32 @@ private:
     };
 
     ////-----------------Distortion Parameters------------------------
-    juce::AudioParameterFloat* gainParam { nullptr };
-    juce::AudioParameterFloat* toneParam { nullptr };
-    juce::AudioParameterFloat* volumeParam { nullptr };
+   // juce::AudioParameterFloat* gainParam { nullptr };
+    //juce::AudioParameterFloat* toneParam { nullptr };
+    //juce::AudioParameterFloat* volumeParam { nullptr };
 
     juce::dsp::Convolution convolver_clean;
     juce::dsp::Convolution convolver_fuzz;
 
     //---------------Chorus Parameters-----------------
     juce::dsp::Chorus<float> chorus;
-    juce::AudioParameterFloat* chorusRate  { nullptr };
-    juce::AudioParameterFloat* chorusDepth  { nullptr };
-    juce::AudioParameterFloat* chorusMix  { nullptr };
+
+    //juce::AudioParameterFloat* chorusRate  { nullptr };
+  //  juce::AudioParameterFloat* chorusDepth  { nullptr };
+   // juce::AudioParameterFloat* chorusMix  { nullptr };
     //------------Reverb Parameters--------------------
     juce::dsp::Reverb reverb;
     juce::dsp::Reverb::Parameters params;
 
-    juce::AudioParameterFloat* size   { nullptr };
-    juce::AudioParameterFloat* damp   { nullptr };
-    juce::AudioParameterFloat* width  { nullptr };
-    juce::AudioParameterFloat* reverbMix    { nullptr };
+    //juce::AudioParameterFloat* size   { nullptr };
+    //juce::AudioParameterFloat* damp   { nullptr };
+    //juce::AudioParameterFloat* width  { nullptr };
+    //juce::AudioParameterFloat* reverbMix    { nullptr };
     juce::AudioParameterBool* freeze  { nullptr };
 
+    //------------RMS reader Parameters--------------------
+    juce::LinearSmoothedValue<float> InputRMSLevelLeft, InputRMSLevelRight;
+    juce::LinearSmoothedValue<float> OutputRMSLevelLeft, OutputRMSLevelRight;
  
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EMToneAudioProcessor)

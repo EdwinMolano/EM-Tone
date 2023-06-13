@@ -4,6 +4,12 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="KnASKI" name="EM-Tone">
     <GROUP id="{EE59961E-B87A-736A-EF87-F020D9A9A227}" name="Source">
+      <GROUP id="{C2274EC4-07A7-F45C-AF27-51D470AA8F6E}" name="Component">
+        <FILE id="fTsaki" name="HorizontalGradientMeter.h" compile="0" resource="0"
+              file="Source/HorizontalGradientMeter.h"/>
+        <FILE id="zPAraE" name="HorizontalMeter.h" compile="0" resource="0"
+              file="Source/HorizontalMeter.h"/>
+      </GROUP>
       <FILE id="sbRykZ" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="jNUMc0" name="PluginProcessor.h" compile="0" resource="0"

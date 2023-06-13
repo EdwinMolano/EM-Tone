@@ -13,10 +13,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout EMToneAudioProcessor::create
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout; //created layout variable
 
-    /*layout.add(std::make_unique<juce::AudioParameterFloat>("Peak Freq",
-        "Peak Freq",
-        juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 0.25f),
-        2000.f));*/
+    // 3 EQ
     layout.add(std::make_unique<juce::AudioParameterFloat>("Low",
         "Low",
         juce::NormalisableRange<float>(-24.f, 24.f, 0.5f, 1.f),
@@ -31,22 +28,84 @@ juce::AudioProcessorValueTreeState::ParameterLayout EMToneAudioProcessor::create
         juce::NormalisableRange<float>(-24.f, 24.f, 0.5f, 1.f),
         0.f));
 
-    /*layout.add(std::make_unique<juce::AudioParameterFloat>("Peak Quality",
-        "Peak Quality",
-        juce::NormalisableRange<float>(0.1f, 10.f, 0.05f, 1.f),
-        1.f));*/
+    //Distortion
+    layout.add(std::make_unique<juce::AudioParameterFloat>("Gain",
+        "Gain",
+        juce::NormalisableRange<float>(0.01f, 20.f, 0.001),
+        2.0));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("Tone",
+        "Tone",
+        juce::NormalisableRange<float>(10.f, 20.f, 0.001),
+        15.0));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("Volume",
+        "Volume",
+        juce::NormalisableRange<float>(0.f, 1.5f, 0.001),
+        0.75));
+
+
+    //Chorus
+    layout.add(std::make_unique<juce::AudioParameterFloat>("ChorusMix",
+        "ChorusMix",
+        juce::NormalisableRange<float>(0.f, 1.f, 0.001),
+        0.0));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("ChorusDepth",
+        "ChorusDepth",
+        juce::NormalisableRange<float>(0.f, 1.f, 0.001), 
+        0.5f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("ChorusRate",
+        "ChorusRate",
+        juce::NormalisableRange<float>(0.f, 1.f, 0.001), 
+        0.5));
+
+
+    //Reverb
+    layout.add(std::make_unique<juce::AudioParameterFloat>("ReverbMix",
+        "ReverbMix",
+        juce::NormalisableRange<float>(0.f, 1.f, 0.001),
+        0.0));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("ReverbSize",
+        "ReverbSize",
+        juce::NormalisableRange<float>(0.f, 1.f, 0.001), 
+        0.5));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("ReverbWidth",
+        "ReverbWidth",
+        juce::NormalisableRange<float>(0.f, 1.f, 0.001),
+        0.5));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("ReverbDamp",
+        "ReverbDamp",
+        juce::NormalisableRange<float>(0.f, 1.f, 0.001),
+        0.5));
+
 
     return layout;
 
 }
 
+
+
 ChainSettings getChainSettings(juce::AudioProcessorValueTreeState& apvts)
 {
     ChainSettings settings;
-
+    // 3 EQ
     settings.GainLow = apvts.getRawParameterValue("Low")->load();
     settings.GainMid = apvts.getRawParameterValue("Mid")->load();
     settings.GainHigh = apvts.getRawParameterValue("High")->load();
+    //Dist
+    settings.Gain = apvts.getRawParameterValue("Gain")->load();
+    settings.Tone = apvts.getRawParameterValue("Tone")->load();
+    settings.Volume = apvts.getRawParameterValue("Volume")->load();
+    //Chorus
+    settings.ChorusMix = apvts.getRawParameterValue("ChorusMix")->load();
+    settings.ChorusDepth = apvts.getRawParameterValue("ChorusDepth")->load();
+    settings.ChorusRate = apvts.getRawParameterValue("ChorusRate")->load();
+
+    //Reverb
+    settings.ReverbMix = apvts.getRawParameterValue("ReverbMix")->load();
+    settings.ReverbSize = apvts.getRawParameterValue("ReverbSize")->load();
+    settings.ReverbWidth = apvts.getRawParameterValue("ReverbWidth")->load();
+    settings.ReverbDamp = apvts.getRawParameterValue("ReverbDamp")->load();
+
+    //freeze?
 
     return settings;
 }
@@ -64,51 +123,42 @@ EMToneAudioProcessor::EMToneAudioProcessor()
                        )
 #endif
 {
-    //3 EQ Knobs Parameters
-
-    /*lowKnob = new juce::AudioParameterFloat("Low", "Low",-24.f, 24.f, 0.f);
-    midKnob = new juce::AudioParameterFloat("Mid", "Mid", -24.f, 24.f, 0.f);
-    highKnob = new juce::AudioParameterFloat("High", "High", -24.f, 24.f, 0.f);
-
-    addParameter(lowKnob);
-    addParameter(midKnob);
-    addParameter(highKnob);*/
     
     //Distortion Parameters
-
-    addParameter(gainParam = new juce::AudioParameterFloat("gain", "Gain", juce::NormalisableRange<float>(0.01f, 30.f, 0.001), 5.0));
-    addParameter(toneParam = new juce::AudioParameterFloat("tone", "Tone", juce::NormalisableRange<float>(10.f, 20.f, 0.001), 15.0));
-    addParameter(volumeParam = new juce::AudioParameterFloat("volume", "Volume", juce::NormalisableRange<float>(0.f, 1.7f, 0.001), 1.0));
+ 
+   // addParameter(toneParam = new juce::AudioParameterFloat("tone", "Tone", juce::NormalisableRange<float>(10.f, 20.f, 0.001), 15.0));
+    //addParameter(volumeParam = new juce::AudioParameterFloat("volume", "Volume", juce::NormalisableRange<float>(0.f, 1.7f, 0.001), 1.0));
 
     convolver_clean.reset();
 
     convolver_fuzz.reset();
 
     //Chorus Parameters
-    chorusRate = new juce::AudioParameterFloat("ChorusRate", "Chorus Rate", 0.1f, 1.0f, 0.5f);
-    chorusDepth = new juce::AudioParameterFloat("ChorusDepth", "Chorus Depth", 0.0f, 1.0f, 0.5f);
-    chorusMix = new juce::AudioParameterFloat("ChorusMix", "Chorus Mix", 0.0f, 1.0f, 0.0f);
+    //chorusRate = new juce::AudioParameterFloat("ChorusRate", "Chorus Rate", 0.1f, 1.0f, 0.5f);
+    //chorusDepth = new juce::AudioParameterFloat("ChorusDepth", "Chorus Depth", 0.0f, 1.0f, 0.5f);
+    //chorusMix = new juce::AudioParameterFloat("ChorusMix", "Chorus Mix", 0.0f, 1.0f, 0.0f);
 
-    addParameter(chorusRate);
-    addParameter(chorusDepth);
-    addParameter(chorusMix);
+   // addParameter(chorusMix);
+   // addParameter(chorusRate);
+    //addParameter(chorusDepth);
+    
 
-    updateChorusParams();
+    //updateChorusParams();
 
     //Reverb Parameters
-    size = new juce::AudioParameterFloat("Size", "Reverb Size", 0.0f, 1.0f, 0.5f);
-    damp = new juce::AudioParameterFloat("Damp", "Reverb Damp", 0.0f, 1.0f, 0.5f);//Bright reverb or darker
-    width = new juce::AudioParameterFloat("Width", "Reverb Width", 0.0f, 1.0f, 0.5f);
-    reverbMix = new juce::AudioParameterFloat("ReverbMix", "Reverb Mix", 0.0f, 1.0f, 0.0f);
+    //size = new juce::AudioParameterFloat("Size", "Reverb Size", 0.0f, 1.0f, 0.5f);
+    //damp = new juce::AudioParameterFloat("Damp", "Reverb Damp", 0.0f, 1.0f, 0.5f);//Bright reverb or darker
+   // width = new juce::AudioParameterFloat("Width", "Reverb Width", 0.0f, 1.0f, 0.5f);
+    //reverbMix = new juce::AudioParameterFloat("ReverbMix", "Reverb Mix", 0.0f, 1.0f, 0.0f);
+
     freeze = new juce::AudioParameterBool("Freeze", "Reverb Freeze", false);
-
-    addParameter(size);
-    addParameter(damp);
-    addParameter(width);
-    addParameter(reverbMix);
-    addParameter(freeze);
-
-    updateReverbParams();
+   
+   // addParameter(reverbMix);
+    //addParameter(size);
+    //addParameter(damp);
+    //addParameter(width);
+    //addParameter(freeze);
+    //updateReverbParams();
 }
 
 EMToneAudioProcessor::~EMToneAudioProcessor()
@@ -333,6 +383,18 @@ void EMToneAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     reverb.prepare(specChorusRev);
 
 
+    //------------------------------RMS reader Parameters----------------------------------------------
+    InputRMSLevelLeft.reset(sampleRate, 0.5);
+    InputRMSLevelRight.reset(sampleRate, 0.5);
+    InputRMSLevelLeft.setCurrentAndTargetValue(-100.f);
+    InputRMSLevelRight.setCurrentAndTargetValue(-100.f);
+
+    OutputRMSLevelLeft.reset(sampleRate, 0.5);
+    OutputRMSLevelRight.reset(sampleRate, 0.5);
+    OutputRMSLevelLeft.setCurrentAndTargetValue(-100.f);
+    OutputRMSLevelRight.setCurrentAndTargetValue(-100.f);
+
+
 }
 
 void EMToneAudioProcessor::releaseResources()
@@ -383,6 +445,27 @@ void EMToneAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
    ///////////////////////////////////////////////////////////////////////////////////////////
     //we update our coeficients before we run audio through it
 
+    //////Read INPUT RMS values
+
+    InputRMSLevelLeft.skip(buffer.getNumSamples());
+    InputRMSLevelRight.skip(buffer.getNumSamples());
+    {
+        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+        if (value < InputRMSLevelLeft.getCurrentValue())
+            InputRMSLevelLeft.setTargetValue(value);
+        else
+            InputRMSLevelLeft.setCurrentAndTargetValue(value);
+    }
+
+    {
+        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(1, 0, buffer.getNumSamples()));
+        if (value < InputRMSLevelRight.getCurrentValue())
+            InputRMSLevelRight.setTargetValue(value);
+        else
+            InputRMSLevelRight.setCurrentAndTargetValue(value);
+    }
+
+
     ////// Apply pre-compression
     /*juce::dsp::AudioBlock<float> block_Comp(buffer);
     pre_compressor.process(juce::dsp::ProcessContextReplacing<float>(block_Comp));*/
@@ -419,7 +502,7 @@ void EMToneAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
     *rightChain.get<ChainPos::highK>().coefficients = *highKnob;
 
 
-    ////// Process the audio buffer with the convolution effect
+    ////// Process the audio buffer with the 1st convolution effect
     juce::dsp::AudioBlock<float> block_clean(buffer);
     convolver_clean.process(juce::dsp::ProcessContextReplacing<float>(block_clean));
 
@@ -429,9 +512,10 @@ void EMToneAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
 
     ////// Apply the Distortion effect to each sample in the buffer
     const int numSamples = buffer.getNumSamples();
-    const float gain = gainParam->get();
-    const float tone = toneParam->get();
-    const float volume = volumeParam->get();
+
+    const float gain = chainSettings.Gain;
+    const float tone = chainSettings.Tone;
+    const float volume = chainSettings.Volume;
 
     for (int channel = 0; channel < getTotalNumOutputChannels(); ++channel)
     {
@@ -452,17 +536,52 @@ void EMToneAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
 
     
     // Apply chorus effect
-    updateChorusParams();
+    //updateChorusParams();
+    chorus.setRate(chainSettings.ChorusRate);
+    chorus.setDepth(chainSettings.ChorusDepth);
+    chorus.setMix(chainSettings.ChorusMix);
+
     juce::dsp::AudioBlock<float> block_ch(buffer);
     juce::dsp::ProcessContextReplacing<float> ctx_chorus(block_ch);
     chorus.process(ctx_chorus);
 
 
    ////// Apply Reverb
-    updateReverbParams();
+   // updateReverbParams();
+    params.dryLevel = 1.0f - chainSettings.ReverbMix;
+    params.wetLevel = chainSettings.ReverbMix;
+    params.roomSize = chainSettings.ReverbSize;
+    params.damping =chainSettings.ReverbDamp;
+    params.width = chainSettings.ReverbWidth;
+  
+    params.freezeMode = freeze->get();//?????????
+
+
+    reverb.setParameters(params);
+
+
     juce::dsp::AudioBlock<float> block_rv(buffer);
     juce::dsp::ProcessContextReplacing<float> ctx(block_rv);
     reverb.process(ctx);
+
+    /////Read RMS OUTPUT values
+    OutputRMSLevelLeft.skip(buffer.getNumSamples());
+    OutputRMSLevelRight.skip(buffer.getNumSamples());
+    {
+        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+        if (value < OutputRMSLevelLeft.getCurrentValue())
+            OutputRMSLevelLeft.setTargetValue(value);
+        else
+            OutputRMSLevelLeft.setCurrentAndTargetValue(value);
+    }
+
+    {
+        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(1, 0, buffer.getNumSamples()));
+        if (value < OutputRMSLevelRight.getCurrentValue())
+            OutputRMSLevelRight.setTargetValue(value);
+        else
+            OutputRMSLevelRight.setCurrentAndTargetValue(value);
+    }
 
 
    ///extract the left and right chanel using from buffer 
@@ -491,9 +610,9 @@ bool EMToneAudioProcessor::hasEditor() const
 juce::AudioProcessorEditor* EMToneAudioProcessor::createEditor()
 {
 
-    //return new EMToneAudioProcessorEditor (*this);
+    return new EMToneAudioProcessorEditor (*this);
   
-    return new juce::GenericAudioProcessorEditor(*this);
+   // return new juce::GenericAudioProcessorEditor(*this);
 
 }
 
@@ -539,27 +658,51 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 
 
 
-void EMToneAudioProcessor::updateChorusParams()
-{
+//void EMToneAudioProcessor::updateChorusParams()
+//{
+//    
+//    
+//    
+//    /*chorus.setRate(chorusRate->get());
+//    chorus.setDepth(chorusDepth->get());
+//    chorus.setMix(chorusMix->get());*/
+//    
+//}
 
-    chorus.setRate(chorusRate->get());
-    chorus.setDepth(chorusDepth->get());
-    chorus.setMix(chorusMix->get());
-    
+//void EMToneAudioProcessor::updateReverbParams()
+//{
+//
+//    params.roomSize = size->get();
+//    params.damping = damp->get();
+//    params.width = width->get();
+//    params.wetLevel = reverbMix->get();
+//    params.dryLevel = 1.0f - reverbMix->get();
+//    params.freezeMode = freeze->get();
+//
+//    reverb.setParameters(params);
+//
+//}
+
+float EMToneAudioProcessor::getInputRmsValue(const int channel) const
+{
+    jassert(channel == 0 || channel == 1);
+    if (channel == 0)
+        return InputRMSLevelLeft.getCurrentValue();
+    if (channel == 1)
+        return InputRMSLevelRight.getCurrentValue();
+
+    return 0.f;
 }
 
-void EMToneAudioProcessor::updateReverbParams()
+float EMToneAudioProcessor::getOutputRmsValue(const int channel) const
 {
+    jassert(channel == 0 || channel == 1);
+    if (channel == 0)
+        return OutputRMSLevelLeft.getCurrentValue();
+    if (channel == 1)
+        return OutputRMSLevelRight.getCurrentValue();
 
-    params.roomSize = size->get();
-    params.damping = damp->get();
-    params.width = width->get();
-    params.wetLevel = reverbMix->get();
-    params.dryLevel = 1.0f - reverbMix->get();
-    params.freezeMode = freeze->get();
-
-    reverb.setParameters(params);
-
+    return 0.f;
 }
 
 

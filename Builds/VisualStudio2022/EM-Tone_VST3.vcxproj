@@ -93,7 +93,10 @@
       <AdditionalDependencies>EM-Tone.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>copy "$(OutputPath)$(TargetFileName)" "C:\VST3\$(TargetFileName)"</Command>
+      <Command>copy "$(OutputPath)$(TargetFileName)" "C:\VST3\$(TargetFileName)"
+
+
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
