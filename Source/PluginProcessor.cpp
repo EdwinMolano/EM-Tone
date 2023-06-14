@@ -271,11 +271,12 @@ void EMToneAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     //const float sampleRate = getSampleRate();
     const float frequencyLow = 100.0f; // Low shelf frequency (Hz)
     const float frequencyMid = 2000.0f; // Mid frequency (Hz)
-    const float frequencyHigh = 5000.0f; // High shelf frequency (Hz)
+    const float frequencyHigh = 15000.0f; // High shelf frequency (Hz)
     const float gainLow = -35.0f; // Low shelf gain (dB)
     const float gainMid = 1.0f; // Mid gain (dB)
     const float gainHigh = -35.0f; // High shelf gain (dB)
     const float Q = 2.0f; // Filter Q value
+    const float QExtremes = 6.0f;
 
     // Initialize EQ bands
     pre_eq.get<0>() = juce::dsp::IIR::Coefficients<float>::makeLowShelf(sampleRate, frequencyLow, Q, juce::Decibels::decibelsToGain(gainLow));
@@ -289,7 +290,7 @@ void EMToneAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
 
     auto lowKnob = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
         800.f,
-        Q,
+        QExtremes,
         juce::Decibels::decibelsToGain(chainSettings.GainLow));
     
     auto midKnob = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
@@ -298,7 +299,7 @@ void EMToneAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
         juce::Decibels::decibelsToGain(chainSettings.GainMid));
     auto highKnob = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
         5500.f,
-        Q,
+        QExtremes,
         juce::Decibels::decibelsToGain(chainSettings.GainHigh));
    
     *leftChain.get<ChainPos::lowK>().coefficients = *lowKnob;
@@ -314,9 +315,11 @@ void EMToneAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     //------------------------------Distortion Parameters----------------------------------------------
 
     // Load the first impulse response file
-    juce::File impulseResponseFile1 = juce::File::getCurrentWorkingDirectory()
+    /*juce::File impulseResponseFile1 = juce::File::getCurrentWorkingDirectory()
         .getChildFile("Resources")
-        .getChildFile("TM_CL_01_Catflower.wav");
+        .getChildFile("TM_CL_01_Catflower.wav");*/
+
+    juce::File impulseResponseFile1(("C:\\Users\\Edwin\\Desktop\\HOWEST\\2º Year\\2ºSemester\\Audio Prog\\Assignement\\EM-Tone\\Builds\\VisualStudio2022\\Resources\\TM_CL_01_Catflower.wav"));
 
     // Check if the file exists
     if (impulseResponseFile1.exists())
@@ -335,9 +338,11 @@ void EMToneAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
 
 
     //second file
-    juce::File impulseResponseFile2 = juce::File::getCurrentWorkingDirectory()
+    /*juce::File impulseResponseFile2 = juce::File::getCurrentWorkingDirectory()
         .getChildFile("Resources")
-        .getChildFile("TM_LD_01_BiteMe.wav");
+        .getChildFile("TM_LD_01_BiteMe.wav");*/
+    juce::File impulseResponseFile2(("C:\\Users\\Edwin\\Desktop\\HOWEST\\2º Year\\2ºSemester\\Audio Prog\\Assignement\\EM-Tone\\Builds\\VisualStudio2022\\Resources\\TM_LD_01_BiteMe.wav"));
+
 
     // Check if the file exists
     if (impulseResponseFile2.exists())
@@ -480,7 +485,7 @@ void EMToneAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
 
     auto lowKnob = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
         800.f,
-        2.0f,
+        6.0f,
         juce::Decibels::decibelsToGain(chainSettings.GainLow));
 
     auto midKnob = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
@@ -489,7 +494,7 @@ void EMToneAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
         juce::Decibels::decibelsToGain(chainSettings.GainMid));
     auto highKnob = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
         5500.f,
-        2.0f,
+        6.0f,
         juce::Decibels::decibelsToGain(chainSettings.GainHigh));
 
     *leftChain.get<ChainPos::lowK>().coefficients = *lowKnob;

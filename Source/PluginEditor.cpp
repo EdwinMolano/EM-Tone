@@ -72,33 +72,44 @@ EMToneAudioProcessorEditor::~EMToneAudioProcessorEditor()
 void EMToneAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+   // g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+   // juce::File temp("C:\\Users\\Edwin\\Desktop\\Memes_Factory\\EM_Tone.png");
 
-    g.setColour (juce::Colours::white);
-    g.setFont (15.0f);
+    juce::File temp("C:\\Users\\Edwin\\Desktop\\HOWEST\\2º Year\\2ºSemester\\Audio Prog\\Assignement\\EM-Tone\\Builds\\VisualStudio2022\\Resources\\Em-Tone_Background.png");
+    juce::Image backround = juce::ImageCache::getFromFile(temp);
+    g.drawImage(backround, getLocalBounds().toFloat());
 
     
-    g.drawText("Input Level", 95,55,100, juce::Justification::centred, false);
-    g.drawText("Output Level", 535,55,100, juce::Justification::centred, false);
+    juce::File temp2("C:\\Users\\Edwin\\Desktop\\HOWEST\\2º Year\\2ºSemester\\Audio Prog\\Assignement\\EM-Tone\\Builds\\VisualStudio2022\\Resources\\Em-Tone_Grid_RMSreaders.png");
+    juce::Image gridRMSreaders = juce::ImageCache::getFromFile(temp2);
+    g.drawImage(gridRMSreaders, getLocalBounds().toFloat());
+    g.setColour(juce::Colours::white);
+    g.setFont(15.0f);
 
-    g.drawText("Gain", ((getWidth() / 6.7) * 1) - (130 / 2), (getHeight() * 0.3) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Low", ((getWidth() / 6.7) * 2) - (130 / 2), (getHeight() * 0.3) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Mid", ((getWidth() / 6.7) * 3) - (130 / 2), (getHeight() * 0.3) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("High", ((getWidth() / 6.7) * 4) - (130 / 2), (getHeight() * 0.3) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Tone", ((getWidth() / 6.7) * 5) - (130 / 2), (getHeight() * 0.3) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Volume", ((getWidth() / 6.7) * 6) - (130 / 2), (getHeight() * 0.3) + 5, 100, 100, juce::Justification::centred, false);
+  
 
-    g.drawText("Chorus Mix", ((getWidth() / 6.7) * 2.2) - (130 / 2), (getHeight() * 0.55) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Chorus Depth", ((getWidth() / 6.7) * 3.5) - (130 / 2), (getHeight() * 0.55) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Chorus Rate", ((getWidth() / 6.7) * 4.7) - (130 / 2), (getHeight() * 0.55) + 5, 100, 100, juce::Justification::centred, false);
+    
+    g.drawText("Input Level", 85,76,100, juce::Justification::centred, false);
+    g.drawText("Output Level", 542,76,100, juce::Justification::centred, false);
 
-    g.drawText("Reverb Mix", ((getWidth() / 6.7) * 1.2) - (130 / 2), (getHeight() * 0.8) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Reverb Size", ((getWidth() / 6.7) * 2.7) - (130 / 2), (getHeight() * 0.8) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Reverb Width", ((getWidth() / 6.7) * 4.2) - (130 / 2), (getHeight() * 0.8) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Reverb Tone", ((getWidth() / 6.7) * 5.7) - (130 / 2), (getHeight() * 0.8) + 5, 100, 100, juce::Justification::centred, false);
+    g.drawText("Gain", ((getWidth() / 6.7) * 1) - (130 / 2), (getHeight() * 0.3) + 1, 100, 100, juce::Justification::centred, false);
+    g.drawText("Low", ((getWidth() / 6.7) * 2) - (130 / 2), (getHeight() * 0.3) + 1, 100, 100, juce::Justification::centred, false);
+    g.drawText("Mid", ((getWidth() / 6.7) * 3) - (130 / 2), (getHeight() * 0.3) + 1, 100, 100, juce::Justification::centred, false);
+    g.drawText("High", ((getWidth() / 6.7) * 4) - (130 / 2), (getHeight() * 0.3) + 1, 100, 100, juce::Justification::centred, false);
+    g.drawText("Tone", ((getWidth() / 6.7) * 5) - (130 / 2), (getHeight() * 0.3) + 1, 100, 100, juce::Justification::centred, false);
+    g.drawText("Volume", ((getWidth() / 6.7) * 6) - (130 / 2), (getHeight() * 0.3) + 1, 100, 100, juce::Justification::centred, false);
 
-    g.setFont(55.0f);
-    g.drawText("EM-Tone", 250, 30, 200, juce::Justification::centred,false);
+    g.drawText("Chorus Mix", ((getWidth() / 6.7) * 2.2) - (130 / 2), (getHeight() * 0.55) + 1, 100, 100, juce::Justification::centred, false);
+    g.drawText("Chorus Depth", ((getWidth() / 6.7) * 3.5) - (130 / 2), (getHeight() * 0.55) + 1, 100, 100, juce::Justification::centred, false);
+    g.drawText("Chorus Rate", ((getWidth() / 6.7) * 4.7) - (130 / 2), (getHeight() * 0.55) + 1, 100, 100, juce::Justification::centred, false);
+
+    g.drawText("Reverb Mix", ((getWidth() / 6.7) * 1.2) - (130 / 2), (getHeight() * 0.8) +1, 100, 100, juce::Justification::centred, false);
+    g.drawText("Reverb Size", ((getWidth() / 6.7) * 2.7) - (130 / 2), (getHeight() * 0.8) + 1, 100, 100, juce::Justification::centred, false);
+    g.drawText("Reverb Width", ((getWidth() / 6.7) * 4.2) - (130 / 2), (getHeight() * 0.8) + 1, 100, 100, juce::Justification::centred, false);
+    g.drawText("Reverb Tone", ((getWidth() / 6.7) * 5.7) - (130 / 2), (getHeight() * 0.8) + 1, 100, 100, juce::Justification::centred, false);
+
+   /* g.setFont(55.0f);
+    g.drawText("EM-Tone", 250, 30, 200, juce::Justification::centred,false);*/
 
 }
 
@@ -126,18 +137,20 @@ void EMToneAudioProcessorEditor::resized()
     ReverbDamp.setBounds(((getWidth() / 6.7) * 5.7) - (130 / 2), (getHeight() * 0.8) - (100 / 2), 100, 100);
 
     ///---------------RMS readers------------------
-    InputHorizonalMeterL.setBounds(30,30 , 200, 15);
-    InputHorizonalMeterR.setBounds(30, 50, 200, 15);
+    InputHorizonalMeterL.setBounds(30, 50, 180, 15);
+    InputHorizonalMeterR.setBounds(30, 70, 180, 15);
 
-    OutputHorizonalMeterL.setBounds(470, 30, 200, 15);
-    OutputHorizonalMeterR.setBounds(470, 50, 200, 15);
+    OutputHorizonalMeterL.setBounds(493, 50, 173, 15);
+    OutputHorizonalMeterR.setBounds(493, 70, 173, 15);
 
 
-    InputGradientMeterL.setBounds(30, 30, 200, 15);
-    InputGradientMeterR.setBounds(30, 50, 200, 15);
+    InputGradientMeterL.setBounds(30, 50, 180, 15);
+    InputGradientMeterR.setBounds(30, 70, 180, 15);
 
-    OutputGradientMeterL.setBounds(470, 30, 200, 15);
-    OutputGradientMeterR.setBounds(470, 50, 200, 15);
+    OutputGradientMeterL.setBounds(493, 50, 173, 15);
+    OutputGradientMeterR.setBounds(493, 70, 173, 15);
+
+    
 
 }
 
